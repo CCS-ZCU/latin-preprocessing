@@ -32,18 +32,17 @@ nlp = spacy.load('la_core_web_lg')
 
 
 
-def text_cleaner(rawtext, lowercase=True):
+def text_cleaner(rawtext, lowertext=False):
     cleantext = rawtext.replace("¬\n", "").replace("\n", " ").replace("ß", "ss").replace("ij","ii")
     cleantext = " ".join([t[0] + t[1:].lower() for t in cleantext.split()])
     cleantext = re.sub("\s\s+", " ", cleantext)
     cleantext = unidecode(cleantext)
+    cleantext = cleantext.replace(". &", ", &") 
     cleantext = cleantext.replace("v", "u").replace("V", "U")
-    if lowercase:
-        cleantext = cleantext.lower()
     return cleantext
 
 # lets encapsulate the cleaning and spacy pipeline application into one function
-def from_rawtext_to_doc(rawtext, lowertext=True):
+def from_rawtext_to_doc(rawtext, lowertext=False):
     cleantext = text_cleaner(rawtext, lowertext)
     segment_len = 800000
     if len(cleantext) > segment_len:
