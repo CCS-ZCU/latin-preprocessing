@@ -33,6 +33,8 @@ nlp = spacy.load('la_core_web_lg')
 
 
 def text_cleaner(rawtext, lowertext=False):
+    if lowertext:
+        rawtext = rawtext.lower()
     cleantext = rawtext.replace("¬\n", "").replace("\n", " ").replace("ß", "ss").replace("ij","ii")
     cleantext = " ".join([t[0] + t[1:].lower() for t in cleantext.split()])
     cleantext = re.sub("\s\s+", " ", cleantext)
@@ -40,6 +42,8 @@ def text_cleaner(rawtext, lowertext=False):
     cleantext = cleantext.replace(". &", ", &") 
     cleantext = cleantext.replace("v", "u").replace("V", "U")
     return cleantext
+
+
 
 # lets encapsulate the cleaning and spacy pipeline application into one function
 def from_rawtext_to_doc(rawtext, lowertext=False):
